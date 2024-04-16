@@ -26,18 +26,17 @@ export const EditableSpan = ({value, onChange}: PropsType) => {
 	return (
 		<>
 			{editMode
-				? <TextField
-					label="Enter a title"
+				?
+				<TextField
 					variant={'outlined'}
-					onBlur={deactivateEditModeHandler}
-					autoFocus
 					value={title}
 					size={'small'}
 					onChange={changeTitleHandler}
+					onBlur={deactivateEditModeHandler}
+					autoFocus
 				/>
 				: <span onDoubleClick={activateEditModeHandler}>{value}</span>
 			}
 		</>
 	);
 };
-
