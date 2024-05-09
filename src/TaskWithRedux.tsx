@@ -1,32 +1,38 @@
+
+
+//tod: добавить store (useSelector, dispatch) к Task (в компоненте (создать её) TaskWithRedux, на примере TodolistWithRedux)
+
 import React, {ChangeEvent, memo} from "react";
 import {Checkbox, IconButton} from "@mui/material";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {TaskType} from "./Todolist";
+import {useDispatch} from "react-redux";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 
 
 export type TaskPropsType = {
     task: TaskType
-    removeTask: (taskId: string, todolistId: string) => void
-    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
-    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     id: string
 }
 
 
-export const Task = memo((
-    {task, removeTask, changeTaskStatus, changeTaskTitle, id}: TaskPropsType) => {
+export const TaskWithRedux = memo((
+    {task, id}: TaskPropsType) => {
+
+    //const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+    //const {id, title, isDone} = task
+    const dispatch = useDispatch();
 
 
+    const onClickHandler = () => dispatch(removeTaskAC(task.id, id))
 
 
-    const onClickHandler = () => removeTask(task.id, id)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let newIsDoneValue = e.currentTarget.checked;
-        changeTaskStatus(task.id, newIsDoneValue, id);
+        dispatch(changeTaskStatusAC(task.id, e.currentTarget.checked, id))
     }
     const onTitleChangeHandler = (newValue: string) => {
-        changeTaskTitle(task.id, newValue, id);
+        dispatch(changeTaskTitleAC(task.id, newValue, id))
     }
 
     return <div key={task.id} className={task.isDone ? "is-done" : ""}>
@@ -41,3 +47,5 @@ export const Task = memo((
         </IconButton>
     </div>
 })
+
+
