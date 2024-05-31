@@ -1,5 +1,5 @@
-import { tasksReducer } from './tasks-reducer';
-import { todolistsReducer } from './todolists-reducer';
+import { tasksReducer } from '../components/todolistList/todolist/task/tasks-reducer';
+import { todolistsReducer } from '../components/todolistList/todolists-reducer';
 import {AnyAction, applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {useDispatch} from "react-redux";
 import {thunk, ThunkDispatch} from "redux-thunk";
