@@ -1,12 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
+import { UpdateDomainTaskModelType } from "../features/TodolistsList/tasks.reducer";
+import { TaskPriorities, TaskStatuses } from "../common/enum/enums";
 
-const settings = {
+export const settings = {
      withCredentials: true,
      headers: {
           'API-KEY': '72046884-8665-4f22-8638-ad799be78564',
      },
 };
-const instance = axios.create({
+export const instance = axios.create({
      baseURL: 'https://social-network.samuraijs.com/api/1.1/',
      ...settings,
 });
@@ -47,9 +49,7 @@ export const todolistsAPI = {
      createTask(todolistId: string, taskTitile: string) {
           return instance.post<ResponseType<{ item: TaskType }>>(
                `todo-lists/${todolistId}/tasks`,
-               {
-                    title: taskTitile,
-               },
+               { title: taskTitile },
           );
      },
      updateTask(
@@ -71,55 +71,19 @@ export type LoginParamsType = {
      captcha?: string;
 };
 
-export const authAPI = {
-     login(data: LoginParamsType) {
-          const promise = instance.post<ResponseType<{ userId?: number }>>(
-               'auth/login',
-               data,
-          );
-          return promise;
-     },
-     logout() {
-          const promise =
-               instance.delete<ResponseType<{ userId?: number }>>('auth/login');
-          return promise;
-     },
-     me() {
-          const promise =
-               instance.get<
-                    ResponseType<{ id: number; email: string; login: string }>
-               >('auth/me');
-          return promise;
-     },
-};
+
 
 // types
+
+export type UpdateTaskArgs = { taskId: string; model: UpdateDomainTaskModelType; todolistId: string }
+
 export type TodolistType = {
      id: string;
      title: string;
      addedDate: string;
      order: number;
 };
-export type ResponseType<D = {}> = {
-     resultCode: number;
-     messages: Array<string>;
-     data: D;
-};
 
-export enum TaskStatuses {
-     New = 0,
-     InProgress = 1,
-     Completed = 2,
-     Draft = 3,
-}
-
-export enum TaskPriorities {
-     Low = 0,
-     Middle = 1,
-     Hi = 2,
-     Urgently = 3,
-     Later = 4,
-}
 
 export type TaskType = {
      description: string;

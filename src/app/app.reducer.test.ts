@@ -1,11 +1,6 @@
-import {
-     AppInitialState,
-     appReducer,
-     setAppError,
-     setAppStatus,
-} from 'app/app-slice';
+import { appActions, AppInitialStateType, appReducer } from 'app/app.reducer';
 
-let startState: AppInitialState;
+let startState: AppInitialStateType;
 
 beforeEach(() => {
      startState = {
@@ -18,7 +13,7 @@ beforeEach(() => {
 test('correct error message should be set', () => {
      const endState = appReducer(
           startState,
-          setAppError({ error: 'some error' }),
+          appActions.setAppError({ error: 'some error' }),
      );
      expect(endState.error).toBe('some error');
 });
@@ -26,7 +21,7 @@ test('correct error message should be set', () => {
 test('correct status should be set', () => {
      const endState = appReducer(
           startState,
-          setAppStatus({ status: 'loading' }),
+          appActions.setAppStatus({ status: 'loading' }),
      );
      expect(endState.status).toBe('loading');
 });

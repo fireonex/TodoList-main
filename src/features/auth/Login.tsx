@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
-import { loginTC, selectIsLoggedIn } from 'features/Login/auth-slice';
+import { loginTC } from 'features/auth/auth.reducer';
 import { Navigate } from 'react-router-dom';
-import { useAppDispatch } from 'hooks/useAppDispatch';
+import { useAppDispatch } from 'common/useAppDispatch';
 import {
      Button,
      Checkbox,
@@ -14,6 +14,7 @@ import {
      Grid,
      TextField,
 } from '@mui/material';
+import { selectIsLoggedIn } from 'features/auth/auth.selectors';
 
 export const Login = () => {
      const dispatch = useAppDispatch();

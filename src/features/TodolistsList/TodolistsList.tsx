@@ -2,26 +2,26 @@ import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
      addTodolistTC,
-     changeTodolistFilter,
      changeTodolistTitleTC,
      fetchTodolistsTC,
      FilterValuesType,
      removeTodolistTC,
-     selectTodolists,
-} from 'features/TodolistsList/todolists-slice';
+     todolistsActions,
+} from 'features/TodolistsList/todolists.reducer';
 import {
-     addTaskTC,
+     addTask,
      removeTaskTC,
-     selectTasks,
      updateTaskTC,
-} from 'features/TodolistsList/tasks-slice';
-import { TaskStatuses } from 'api/todolists-api';
+} from 'features/TodolistsList/tasks.reducer';
 import { Grid, Paper } from '@mui/material';
-import { AddItemForm } from 'components/AddItemForm/AddItemForm';
+import { AddItemForm } from 'common/components/AddItemForm/AddItemForm';
 import { Todolist } from './Todolist/Todolist';
 import { Navigate } from 'react-router-dom';
-import { useAppDispatch } from 'hooks/useAppDispatch';
-import { selectIsLoggedIn } from 'features/Login/auth-slice';
+import { useAppDispatch } from 'common/useAppDispatch';
+import { selectIsLoggedIn } from 'features/auth/auth.selectors';
+import { selectTasks } from 'features/TodolistsList/tasks.selectors';
+import { selectTodolists } from 'features/TodolistsList/todolists.selectors';
+import { TaskStatuses } from "../../common/enum/enums";
 
 type PropsType = {
      demo?: boolean;
@@ -48,7 +48,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
      }, []);
 
      const addTask = useCallback(function (title: string, todolistId: string) {
-          const thunk = addTaskTC(title, todolistId);
+          const thunk = addTask(title, todolistId);
           dispatch(thunk);
      }, []);
 
@@ -72,13 +72,9 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
 
      const changeFilter = useCallback(function (
           filter: FilterValuesType,
-          todolistId: string,
+          id: string,
      ) {
-          const action = changeTodolistFilter({
-               id: todolistId,
-               filter: filter,
-          });
-          dispatch(action);
+          dispatch(todolistsActions.changeTodolistFilter({ id, filter }));
      }, []);
 
      const removeTodolist = useCallback(function (id: string) {
