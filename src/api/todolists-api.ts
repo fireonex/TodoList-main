@@ -19,11 +19,7 @@ export const todolistsAPI = {
     deleteTodolist(id: string) {
         return instance.delete<ResponseType>(`todo-lists/${id}`);
     },
-
     updateTodolist(id: string, title: string) {
-
-        //первый дженерик - не имеет значения если типизируем три дженерика,
-        // второй - то что возвращает бэкенд, третий - то что отправляем на бэкенд
         return instance.put<ResponseType, AxiosResponse<ResponseType>, { title: string }>(`todo-lists/${id}`, {title});
     },
     getTasks(todolistId: string) {
@@ -54,12 +50,14 @@ export type ResponseType<D = {}> = {
     data: D
 }
 
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
