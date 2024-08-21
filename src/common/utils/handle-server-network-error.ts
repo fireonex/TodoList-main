@@ -1,25 +1,22 @@
-import { Dispatch } from "redux";
-import axios, { AxiosError } from "axios";
-import { appActions } from "app/app.reducer";
+import axios from "axios"
+import { appActions } from "app/model/appSlice"
+import { AppDispatch } from "app/model/store"
 
 /**
- * This function checks if the error is an Axios error and dispatches the appropriate
- * actions to set the application error message and status. If the error is not an Axios error,
- * it handles it as a native error.
- *
- * @param {unknown} e - The error object that occurred during a network request.
- * @param {Dispatch} dispatch - The dispatch function from Redux to send actions to the store.
- *
- * @returns {void} - This function does not return a value.
+ * Обрабатывает ошибки сети, возникающие при отправке запросов на сервер
+ * @param {unknown} err - Ошибка, которая произошла при отправке запроса на сервер
+ * @param {AppDispatch} dispatch - Функция dispatch из библиотеки Redux для отправки actions
+ * @returns {void} - Данная функция ничего не возвращает
  */
-
-export const handleServerNetworkError = (e: unknown, dispatch: Dispatch) => {
-  const err = e as Error | AxiosError<{ error: string }>;
+export const handleServerNetworkError = (err: unknown, dispatch: AppDispatch): void => {
+  let errorMessage = "Some error occurred"
   if (axios.isAxiosError(err)) {
-    const error = err.message ? err.message : "Some error occurred";
-    dispatch(appActions.setAppError({ error }));
+    errorMessage = err.response?.data?.message || err?.message || errorMessage
+  } else if (err instanceof Error) {
+    errorMessage = `Native error: ${err.message}`
   } else {
-    dispatch(appActions.setAppError({ error: `Native error ${err.message}` }));
+    errorMessage = JSON.stringify(err)
   }
-  dispatch(appActions.setAppStatus({ status: "failed" }));
-};
+
+  dispatch(appActions.setAppError({ error: errorMessage }))
+}
